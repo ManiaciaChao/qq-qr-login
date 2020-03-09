@@ -2,9 +2,18 @@
   "name": "qq-qr-login",
   "version": "1.0.0",
   "description": "QR login for QQ web pages. QQ网页扫码登录。",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "maniacata",
   "license": "MIT",
+  "scripts": {
+    "prepublish": "yarn build",
+    "test":"node ./dist/test.js",
+    "build":"tsc"
+  },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@types/tough-cookie": "^2.3.6",
     "fetch-cookie": "^0.7.3",

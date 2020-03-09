@@ -1,6 +1,6 @@
 import { CookieJar } from "tough-cookie";
 import { writeFileSync } from "fs";
-import nodeFetch from "node-fetch";
+import nodeFetch, { Response } from "node-fetch";
 import { withQuery, getCookieValue, hash33, IParams, sleep } from "./utils";
 
 export interface IConfig {
@@ -74,7 +74,7 @@ export const init = (
     );
   };
 
-  const login = async () => {
+  const login = async (cb?: (err: boolean, resp?: Response) => void) => {
     try {
       await prework();
     } catch {
@@ -93,8 +93,11 @@ export const init = (
       }
       while (true) {
         const resp = await queryQRCodeState();
-        console.log(resp.status);
-        resp;
+        if (resp.status === 200) {
+          cb && cb(false, resp);
+        } else {
+          cb && cb(true);
+        }
         const state = await resp.text();
         if (state.includes("未失效")) {
           await sleep(1000);
@@ -111,6 +114,6 @@ export const init = (
   return {
     fetch,
     jar,
-    login
+    login,
   };
 };
