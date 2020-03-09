@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tough_cookie_1 = require("tough-cookie");
+const path_1 = require("path");
 const fs_1 = require("fs");
+const tough_cookie_1 = require("tough-cookie");
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const utils_1 = require("./utils");
 exports.init = (config, cookieJar, qrCodePath) => {
@@ -60,9 +61,9 @@ exports.init = (config, cookieJar, qrCodePath) => {
         while (true) {
             try {
                 const qrCode = await getQRCode();
-                const path = `${qrCodePath ? qrCodePath : __dirname}/qrCode.png`;
+                const path = path_1.join(qrCodePath ? qrCodePath : __dirname, "/qrCode.png");
                 fs_1.writeFileSync(path, await qrCode.buffer());
-                console.log(`请扫描二维码:${path}`);
+                console.log(`请扫描二维码: ${path}`);
             }
             catch (err) {
                 console.log(err);

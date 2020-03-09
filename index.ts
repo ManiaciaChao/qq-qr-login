@@ -1,5 +1,6 @@
-import { CookieJar } from "tough-cookie";
+import {join} from "path"
 import { writeFileSync } from "fs";
+import { CookieJar } from "tough-cookie";
 import nodeFetch, { Response } from "node-fetch";
 import { withQuery, getCookieValue, hash33, IParams, sleep } from "./utils";
 
@@ -84,9 +85,9 @@ export const init = (
     while (true) {
       try {
         const qrCode = await getQRCode();
-        const path = `${qrCodePath ? qrCodePath : __dirname}/qrCode.png`;
+        const path = join(qrCodePath ? qrCodePath : __dirname,"/qrCode.png");
         writeFileSync(path, await qrCode.buffer());
-        console.log(`请扫描二维码:${path}`);
+        console.log(`请扫描二维码: ${path}`);
       } catch (err) {
         console.log(err);
         continue;
