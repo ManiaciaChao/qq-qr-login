@@ -1,5 +1,5 @@
 import { format } from "url";
-import { jar } from "./fetch";
+import { CookieJar } from "tough-cookie";
 
 export const sleep = (ms: number) =>
   new Promise(resolve =>
@@ -11,13 +11,14 @@ export const sleep = (ms: number) =>
 export interface IParams {
   [key: string]: string | number;
 }
+
 export const hash33 = (t: string) => {
   for (var e = 0, i = 0, n = t.length; i < n; ++i)
     e += (e << 5) + t.charCodeAt(i);
   return 2147483647 & e;
 };
 
-export const getCookieValue = (url: string, key: string) =>
+export const getCookieValue = (jar: CookieJar) => (url: string, key: string) =>
   jar.getCookiesSync(url).filter(cookie => cookie.key === key)[0].value;
 
 export const withQuery = (url: string, params: IParams) => {
