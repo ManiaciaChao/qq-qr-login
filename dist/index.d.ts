@@ -9,5 +9,8 @@ export interface IConfig {
 export declare const init: (config: IConfig, cookieJar?: CookieJar | undefined, qrCodePath?: string | undefined) => {
     fetch: typeof nodeFetch;
     jar: CookieJar;
-    login: (cb?: ((err: boolean, resp?: Response | undefined) => void) | undefined) => Promise<void>;
+    login: (cb?: ((err: boolean, resp?: Response | undefined) => void) | undefined) => Promise<{
+        nickname: string;
+        url: string;
+    }>;
 };

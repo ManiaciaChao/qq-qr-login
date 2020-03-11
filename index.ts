@@ -1,4 +1,4 @@
-import {join} from "path"
+import { join } from "path";
 import { writeFileSync } from "fs";
 import { CookieJar } from "tough-cookie";
 import nodeFetch, { Response } from "node-fetch";
@@ -85,9 +85,9 @@ export const init = (
     while (true) {
       try {
         const qrCode = await getQRCode();
-        const path = join(qrCodePath ? qrCodePath : __dirname,"/qrCode.png");
+        const path = join(qrCodePath ? qrCodePath : __dirname, "/qrCode.png");
         writeFileSync(path, await qrCode.buffer());
-        console.log(`请扫描二维码: ${path}`);
+        console.log(`Please scan QR code: ${path}`);
       } catch (err) {
         console.log(err);
         continue;
@@ -105,8 +105,10 @@ export const init = (
         } else if (state.includes("已失效")) {
           break;
         } else if (state.includes("登录成功")) {
-          console.log(state.split(",")[2]);
-          return;
+          const t = state.split("'");
+          const nickname = t[11];
+          const url = t[5];
+          return { nickname, url };
         }
       }
     }
@@ -115,6 +117,6 @@ export const init = (
   return {
     fetch,
     jar,
-    login,
+    login
   };
 };

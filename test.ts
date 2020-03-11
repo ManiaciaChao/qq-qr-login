@@ -13,6 +13,6 @@ const { login } = init(config);
 (async () => {
   await login(err => {
     equal(err, false, "pass");
-    process.exit(0);
+    // process.exit(0);
   });
 })();

@@ -20,6 +20,6 @@ const { login } = index_1.init(config);
 (async () => {
     await login(err => {
         assert_1.equal(err, false, "pass");
-        process.exit(0);
+        // process.exit(0);
     });
 })();

@@ -85,8 +85,10 @@ exports.init = (config, cookieJar, qrCodePath) => {
                     break;
                 }
                 else if (state.includes("登录成功")) {
-                    console.log(state.split(",")[2]);
-                    return;
+                    const t = state.split("'");
+                    const nickname = t[11];
+                    const url = t[5];
+                    return { nickname, url };
                 }
             }
         }
@@ -94,6 +96,6 @@ exports.init = (config, cookieJar, qrCodePath) => {
     return {
         fetch,
         jar,
-        login,
+        login
     };
 };
