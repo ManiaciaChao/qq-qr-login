@@ -2,7 +2,7 @@ import { join } from "path";
 import { writeFileSync } from "fs";
 import { CookieJar } from "tough-cookie";
 import nodeFetch, { Response } from "node-fetch";
-import { withQuery, getCookieValue, hash33, IParams, sleep } from "./utils";
+import { withQuery, getCookieValue, hash33, sleep } from "./utils";
 
 export interface IConfig {
   appid: string;
@@ -87,7 +87,8 @@ export const init = (
         const qrCode = await getQRCode();
         const path = join(qrCodePath ? qrCodePath : __dirname, "/qrCode.png");
         writeFileSync(path, await qrCode.buffer());
-        console.log(`Please scan QR code: ${path}`);
+        console.log(`Please scan QR code below:`);
+        console.log(path);
       } catch (err) {
         console.log(err);
         continue;
