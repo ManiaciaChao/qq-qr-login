@@ -11,6 +11,11 @@ export interface IConfig {
   s_url: string;
 }
 
+export interface ILoginCallbacks {
+  before?: (qrCodePath: string) => void;
+  after?: (err: boolean, resp?: Response) => void;
+}
+
 export const init = (
   config: IConfig,
   cookieJar?: CookieJar,
@@ -26,7 +31,7 @@ export const init = (
         appid,
         daid,
         style,
-        s_url
+        s_url,
       })
     );
 
@@ -41,7 +46,7 @@ export const init = (
         v: "4",
         t: Math.random(),
         daid: "5",
-        pt_3rd_aid: "0"
+        pt_3rd_aid: "0",
       })
     );
 
@@ -70,12 +75,13 @@ export const init = (
         login_sig,
         pt_uistyle: "40",
         aid: appid,
-        daid
+        daid,
       })
     );
   };
 
-  const login = async (cb?: (err: boolean, resp?: Response) => void) => {
+  // const login = async (cb?: (err: boolean, resp?: Response) => void) => {
+  const login = async (callbacks?: ILoginCallbacks) => {
     try {
       await prework();
     } catch {
@@ -88,17 +94,23 @@ export const init = (
         const path = join(qrCodePath ? qrCodePath : __dirname, "/qrCode.png");
         writeFileSync(path, await qrCode.buffer());
         console.log(`Please scan QR code below:`);
-        console.log(path);
+        if (callbacks?.before) {
+          callbacks.before(path);
+        } else {
+          console.log(path);
+        }
       } catch (err) {
         console.log(err);
         continue;
       }
       while (true) {
         const resp = await queryQRCodeState();
-        if (resp.status === 200) {
-          cb && cb(false, resp);
-        } else {
-          cb && cb(true);
+        if (callbacks?.after) {
+          if (resp.status === 200) {
+            callbacks.after(false, resp);
+          } else {
+            callbacks.after(true);
+          }
         }
         const state = await resp.text();
         if (state.includes("未失效")) {
@@ -118,6 +130,6 @@ export const init = (
   return {
     fetch,
     jar,
-    login
+    login,
   };
 };
